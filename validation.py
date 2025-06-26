@@ -19,11 +19,11 @@ def validate_value(v: str) -> str:
         raise ValueError("Value cannot be empty or whitespace only")
 
     if re.match(IP_PATTERN, v):
-        return v
+        return v.lower()
     elif re.match(DOMAIN_PATTERN, v):
-        return v
+        return v.lower()
     elif re.match(HASH_PATTERN, v):
-        return v
+        return v.lower()
     else:
         raise ValueError(
             "Value must be a valid IP address, domain name, or hash (MD5/SHA1/SHA256). "
@@ -38,7 +38,7 @@ def validate_tags(v: list[str]) -> list[str]:
             raise ValueError("Tags cannot be empty or whitespace only")
         if len(tag) > 50:
             raise ValueError(f"Tag '{tag}' is too long (max 50 characters)")
-    return v
+    return [tag.lower() for tag in v]
 
 
 def get_type(v: str) -> EntryType:

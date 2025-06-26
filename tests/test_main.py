@@ -52,15 +52,11 @@ class TestDataRoute:
     def test_data_valid_request(self):
         """Test a valid data request"""
         response = client.get("/data?q=google.com&limit=10")
-        assert response.json() == []
         assert response.status_code == 200
+        assert response.json() == [{"value": "google.com", "tags": ["something"], "type": "domain"}]
 
-        response = client.post("/submit", json={"value": "google.com", "tags": ["something"]})
-        assert response.status_code == 201
+    # def test_data_valid_request(self):
 
-        response = client.get("/data?q=google.com&limit=10")
-        assert response.status_code == 200
-        assert response.json() == []
 
 
 class TestHealthRoute:

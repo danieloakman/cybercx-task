@@ -22,9 +22,9 @@ def get_all() -> list[StorageEntry]:
 
 
 def search(query: str, limit: int, tags: list[str] = []):
-    it = filter(lambda entry: query == entry.value, _storage.values())
+    it = filter(lambda entry: query.lower() == entry.value.lower(), _storage.values())
     if tags:
-        it = filter(lambda entry: all(tag in entry.tags for tag in tags), it)
+        it = filter(lambda entry: all(tag.lower() in entry.tags for tag in tags), it)
     return list(islice(it, limit))
 
 

@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 import storage
 from validation import DataParams, StorageEntry
-from json import dumps
 
 app = FastAPI(title="CyberCX Task API", version="1.0.0")
 
@@ -52,7 +51,7 @@ async def submit(entry: StorageEntry):
 async def data(params: Annotated[DataParams, Query()]):
     try:
         results = storage.search(params.q, params.limit, params.tags)
-        return JSONResponse(content=dumps(results))
+        return JSONResponse(content=[result.model_dump() for result in results])
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
 
