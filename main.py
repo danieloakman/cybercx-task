@@ -1,8 +1,10 @@
-from fastapi import FastAPI, Request
+from typing import Annotated
+from fastapi import FastAPI, Query, Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 import storage
-from validation import Entry
+from validation import DataParams, StorageEntry
+from json import dumps
 
 app = FastAPI(title="CyberCX Task API", version="1.0.0")
 
@@ -38,7 +40,7 @@ async def health_check():
 
 
 @app.post("/submit", response_class=JSONResponse)
-async def submit(entry: Entry):
+async def submit(entry: StorageEntry):
     try:
         storage.submit(entry)
         return JSONResponse(content=hash(entry), status_code=201)
@@ -47,9 +49,10 @@ async def submit(entry: Entry):
 
 
 @app.get("/data", response_class=JSONResponse)
-async def data(q: str, limit: int, tags: list[str] = []):
+async def data(params: Annotated[DataParams, Query()]):
     try:
-        return JSONResponse(content=storage.search(q, limit, tags))
+        results = storage.search(params.q, params.limit, params.tags)
+        return JSONResponse(content=dumps(results))
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
 

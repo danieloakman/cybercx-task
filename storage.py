@@ -1,15 +1,15 @@
 from itertools import islice
-from validation import Entry
+from validation import StorageEntry
 
 
-_storage: dict[str, Entry] = {}
+_storage: dict[str, StorageEntry] = {}
 
 
-def exists(entry: Entry) -> bool:
+def exists(entry: StorageEntry) -> bool:
     return hash(entry) in _storage
 
 
-def submit(entry: Entry):
+def submit(entry: StorageEntry):
     if exists(entry):
         raise ValueError("Entry already exists")
 
@@ -17,7 +17,7 @@ def submit(entry: Entry):
     print(_storage)
 
 
-def get_all() -> list[Entry]:
+def get_all() -> list[StorageEntry]:
     return list(_storage.values())
 
 
