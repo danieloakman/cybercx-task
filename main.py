@@ -1,10 +1,36 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-from storage import Entry, search, submit, exists
-from validation import DataRequest
+from fastapi.exceptions import RequestValidationError
+from pydantic import BaseModel, ValidationError
+import storage
+from validation import DataRequest, Entry
 
 app = FastAPI(title="CyberCX Task API", version="1.0.0")
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Handle Pydantic validation errors with detailed error messages"""
+    errors = [
+        {
+            "field": " -> ".join(
+                str(loc) for loc in error["loc"][1:]  # `[1:]` so we skip the `body` key
+            ),
+            "message": error["msg"],
+            "type": error["type"],
+            "input": error.get("input"),
+        }
+        for error in exc.errors()
+    ]
+
+    return JSONResponse(
+        status_code=422,
+        content={
+            "message": "Validation error",
+            "errors": errors,
+            "detail": "One or more fields failed validation",
+        },
+    )
 
 
 @app.get("/health")
@@ -13,18 +39,18 @@ async def health_check():
 
 
 @app.post("/submit", response_class=JSONResponse)
-async def submit_endpoint(entry: Entry):
+async def submit(entry: Entry):
     try:
-        submit(entry)
+        storage.submit(entry)
         return JSONResponse(content=hash(entry), status_code=201)
     except ValueError as e:
         return JSONResponse(content={"message": str(e)}, status_code=400)
 
 
-@app.get("/data")
-async def data_endpoint(request: DataRequest):
+@app.get("/data", response_class=JSONResponse)
+async def data(q: str, limit: int, tags: list[str] = []):
     try:
-        return JSONResponse(content=search(request))
+        return JSONResponse(content=storage.search(q, limit, tags))
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
 

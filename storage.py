@@ -19,11 +19,11 @@ def submit(entry: Entry):
 def get_all() -> list[Entry]:
     return list(_storage.values())
 
-def search(req: DataRequest):
-    it = filter(lambda entry: req.q == entry.value, _storage.values())
-    if req.tags:
-        it = filter(lambda entry: all(tag in entry.tags for tag in req.tags), it)
-    return list(islice(it, req.limit))
+def search(query: str, limit: int, tags: list[str] = []):
+    it = filter(lambda entry: query == entry.value, _storage.values())
+    if tags:
+        it = filter(lambda entry: all(tag in entry.tags for tag in tags), it)
+    return list(islice(it, limit))
 
 
 # def get_entry(value: str) -> Entry | None:
