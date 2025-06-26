@@ -26,13 +26,3 @@ def search(query: str, limit: int, tags: list[str] = []):
     if tags:
         it = filter(lambda entry: all(tag.lower() in entry.tags for tag in tags), it)
     return list(islice(it, limit))
-
-
-# def get_entry(value: str) -> Entry | None:
-#     if value in __storage:
-#         return __storage[value]
-#     return None
-
-
-# def get_entries_by_tag(tag: str) -> list[Entry]:
-#     pass
