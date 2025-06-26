@@ -27,4 +27,4 @@ lint: install-dev
 
 # Run tests
 test: install-dev
-	pytest
+	pytest tests/ -v --cov=main --cov-report=term-missing
