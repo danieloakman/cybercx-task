@@ -10,23 +10,45 @@ class TestSubmitRoute:
 
     def test_submit_valid_payload(self):
         """Test submitting a valid payload"""
-
         response = client.post(
             "/submit", json={"value": "example.org", "tags": ["something"]}
         )
-
         assert response.status_code == 201
         assert response.json() == -6547282170865453948
 
+    def test_submit_valid_payload_without_tags(self):
+        """Test submitting a valid payload without tags"""
+        response = client.post("/submit", json={"value": "192.168.1.1"})
+        assert response.status_code == 201
+        assert response.json() == -2312086495570852284
+
     def test_submit_invalid_payload(self):
         """Test submitting an invalid payload"""
-
         response = client.post(
             "/submit", json={"value": "test value", "tags": ["tag1", "tag2", "tag3"]}
         )
-
         assert response.status_code == 400
         assert response.json() == {"message": "Invalid value format"}
+
+    def test_submit_duplicate_payload(self):
+        """Test submitting a duplicate payload"""
+        response = client.post(
+            "/submit", json={"value": "google.com", "tags": ["something"]}
+        )
+        assert response.status_code == 201
+        response = client.post(
+            "/submit", json={"value": "google.com", "tags": ["something"]}
+        )
+        assert response.status_code == 400
+
+class TestDataRoute:
+    """Test cases for the /data route"""
+
+    def test_data_valid_request(self):
+        """Test a valid data request"""
+        response = client.get("/data?q=google&limit=10")
+        assert response.status_code == 200
+        assert response.json() == []
 
 
 class TestHealthRoute:
