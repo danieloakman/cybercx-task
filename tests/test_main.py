@@ -29,10 +29,10 @@ class TestSubmitRoute:
         )
         assert response.status_code == 422
         json_res = response.json()
-        assert 'detail' in json_res
-        assert 'errors' in json_res
-        assert len(json_res['errors']) == 1
-        assert json_res['errors'][0]['field'] == 'value'
+        assert "detail" in json_res
+        assert "errors" in json_res
+        assert len(json_res["errors"]) == 1
+        assert json_res["errors"][0]["field"] == "value"
 
     def test_submit_duplicate_payload(self):
         """Test submitting a duplicate payload"""
@@ -45,6 +45,7 @@ class TestSubmitRoute:
         )
         assert response.status_code == 400
 
+
 class TestDataRoute:
     """Test cases for the /data route"""
 
@@ -56,7 +57,6 @@ class TestDataRoute:
             assert response.json() == []
         except Exception as e:
             print(e)
-
 
 
 class TestHealthRoute:

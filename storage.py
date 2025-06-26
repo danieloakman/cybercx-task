@@ -1,5 +1,5 @@
-from validation import DataRequest, Entry
 from itertools import islice
+from validation import Entry
 
 
 _storage: dict[str, Entry] = {}
@@ -16,8 +16,10 @@ def submit(entry: Entry):
     _storage[hash(entry)] = entry
     print(_storage)
 
+
 def get_all() -> list[Entry]:
     return list(_storage.values())
+
 
 def search(query: str, limit: int, tags: list[str] = []):
     it = filter(lambda entry: query == entry.value, _storage.values())

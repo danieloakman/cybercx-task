@@ -1,0 +1,11 @@
+[flake8]
+# Maximum line length
+max-line-length = 88
+
+extend-ignore = E203,E701,E501
+
+# Show source code for each error
+show-source = True
+
+# Show statistics
+statistics = True

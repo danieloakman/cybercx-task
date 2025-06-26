@@ -6,25 +6,21 @@ install:
 install-dev:
 	pip install -r requirements-dev.txt
 
-# Alternative if using pyproject.toml
-# install-dev:
-# 	pip install -e ".[dev]"
-
-start: install
+start:
 	python main.py
 
 # Development mode with auto-reload
-dev: install-dev
+dev:
 	uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 # Format code with black
-format: install-dev
+format:
 	black .
 
 # Lint code with flake8
-lint: install-dev
-	flake8 .
+lint:
+	flake8 *.py tests/*.py
 
 # Run tests
-test: install-dev
+test:
 	pytest tests/ -v --cov=main --cov-report=term-missing
