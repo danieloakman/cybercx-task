@@ -10,38 +10,11 @@
       venvShellHook
     ]))
     stdenv.cc.cc
-    # swig
     glibc
     glib.dev
-    # libffi
-    # ffmpeg
-    # libsmf
-    # libGL
-    # libz
-    # libzip
-    # libgcc
     zlib
-    # pango
-    # fontconfig
-    # libstdcxx5
-    # opencv
     cmake
-    # pixman
-    # cairo
-    # libjpeg
-    # giflib
-    # librsvg
-    # cairomm_1_16
-
-    # Needed for prisma:
-    # openssl
-    # prisma-engines 
   ];
-  # ++ (with pkgs.xorg; [
-  #   libX11
-  #   libXext
-  #   libSM
-  # ]);
   buildInputs = with pkgs; [
     pkg-config
   ];
