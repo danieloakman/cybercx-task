@@ -84,3 +84,12 @@ curl -X GET "http://localhost:8000/health"
 ### Docs page
 
 See [Docs page](http://localhost:8000/docs)
+
+## Notes on my design
+
+- [storage.py](./storage.py) - exposes functions to read and write to the in memory storage, which is just a dict. The keys for the dict are hashes of `StorageEntry`, see validation.py.
+
+- [validatio.py](./validation.py) - I've put the route validation and `StorageEntry` class in here. I tossed up whether to use fastAPI's `Depend` to make use of the Value and Tags Validation which is shared but ultimtely just went with refactoring the validation functions out and using them in each pydantic model.
+
+- [main.py](./main.py) - I added a validation handler so there's neat error messages when you get a 422 response.
+ 
